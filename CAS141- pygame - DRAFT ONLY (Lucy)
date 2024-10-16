@@ -1,0 +1,56 @@
+import pygame
+ 
+ 
+pygame.init()
+width = 1300
+height = 740
+ 
+screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
+font = pygame.font.Font('Documents\lucy\graphics/font.ttf', 50)
+ 
+ 
+ 
+backround = pygame.image.load('Documents\lucy\graphics/backround.png').convert()
+ 
+text = font.render('Level 1', True, 'White')
+ 
+monster = pygame.image.load('Documents\lucy\graphics/monster.png').convert()
+monster_x_position = 800
+ 
+player = pygame.image.load('Documents\lucy\graphics/player.png').convert_alpha()
+ 
+run = True
+while run == True:
+ 
+   
+    screen.blit(backround,(0,0))
+    screen.blit(text, (520, 100))
+    screen.blit(player, (40, 505))
+ 
+    monster_x_position -= 2
+    if monster_x_position < -100: monster_x_position = 1300
+ 
+    screen.blit(monster, (monster_x_position, 562))
+   
+ 
+   
+ 
+    key = pygame.key.get_pressed()
+    if key[pygame.K_a] == True:
+        player.move_ip(-1,0)
+    elif key[pygame.K_d] == True:
+        player.move_ip(1,0)
+    elif key[pygame.K_w] == True:
+        player.move_ip(0,-1)
+    elif key[pygame.K_s] == True:
+        player.move_ip(0,1)
+ 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+ 
+    pygame.display.update()
+    clock.tick(120)
+ 
+pygame.quit()
