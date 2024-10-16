@@ -1,0 +1,59 @@
+import tkinter as tk
+import requests
+import random
+from tkinter import ttk
+ 
+class ExampleApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Assistant")
+        self.geometry("600x300")
+ 
+        # create a input
+        self.entry_var = tk.StringVar()
+        entry = ttk.Entry(self, textvariable=self.entry_var)
+        entry.pack(padx=20, pady=20)
+ 
+        # create a button，click call ask_ai_model method
+        button = ttk.Button(self, text="Ask AI", command=self.ask_ai_model)
+        button.pack(padx=20, pady=20)
+ 
+        # the answer
+        self.ai_response_label = tk.Label(self, text="Answer", font=("Helvetica", 12))
+        
+ 
+    def ask_ai_model(self):
+        # get input info
+        question = self.entry_var.get()
+ 
+        # call url
+        # url = 'https://www.free-api.com/doc/639'
+        url = "https://eolink.o.apispace.com/yymy/common/aphorism/getEnglishAphorismList"
+
+        payload = {"titleID":83}
+
+        headers = {
+                "X-APISpace-Token":"a2rd7d1o2gqfnoid11qfgbu1lbpqskdg"
+        }
+        data = '1'
+        # send post resquest
+        response=requests.request("post", url, data=payload, headers=headers)
+        # response = requests.get(url)
+        
+        # check if successful
+        if response.status_code == 200:
+            z = random.randrange(1,10)
+            # get return data
+            data = response.text.split('\\",\\"en\\":\\"')[z].split('\\"},{\\"ch\\":\\"')[0]
+            # update label data and show the info on the textfleid
+            self.ai_response_label = ''
+            self.ai_response_label = tk.Label(self, text = data, bg = 'white',font=("Helvetica", 12),justify = 'left',wraplength = 400)
+            self.ai_response_label.pack(padx=60, pady=1)
+        else:
+            print('Failed to retrieve data: ', response.status_code)
+
+       
+ 
+if __name__ == "__main__":
+    app = ExampleApp()
+    app.mainloop()
